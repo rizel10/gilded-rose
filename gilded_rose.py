@@ -1,4 +1,4 @@
-from .quality_updater import factory as qu_factory
+from quality_updater import factory as qu_factory
 
 
 class GildedRose(object):

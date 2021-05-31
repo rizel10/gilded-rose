@@ -45,10 +45,6 @@ class LegendaryQualityUpdater(QualityUpdater):
     """
     Legendary item Sulfuras does not need sell_in and it's quality should remain constant, no other legendary items listed
     """
-    @quality.setter
-    def quality(self, value):
-        pass
-
     def update_quality(self):
         pass
 
