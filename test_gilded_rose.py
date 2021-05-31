@@ -5,7 +5,7 @@ from gilded_rose import Item, GildedRose
 from quality_updater import factory, CommonQualityUpdater, LegendaryQualityUpdater, AgedQualityUpdater, BackstageQualityUpdater, ConjuredQualityUpdater
 
 
-class GildedRoseTest(unittest.TestCase):
+class QualityUpdaterTest(unittest.TestCase):
     def test_quality_updater_factory(self):
         instance = factory.resolve(Item(name="+5 Dexterity Vest", sell_in=10, quality=20))
         self.assertIsInstance(instance, CommonQualityUpdater)
@@ -122,6 +122,39 @@ class GildedRoseTest(unittest.TestCase):
             BackstageQualityUpdater(backstage_3_days).update_quality()
 
         self.assertEqual(backstage_3_days.quality, 0)
+
+
+class GildedRoseTest(unittest.TestCase):
+    def test_gilded_rose(self):
+        items = [
+             Item(name="+5 Dexterity Vest", sell_in=10, quality=20),
+             Item(name="Aged Brie", sell_in=2, quality=0),
+             Item(name="Elixir of the Mongoose", sell_in=5, quality=7),
+             Item(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80),
+             Item(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80),
+             Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20),
+             Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49),
+             Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
+             Item(name="Conjured Mana Cake", sell_in=3, quality=6),  # <-- :O
+            ]
+
+        sell_in_initial_values = [x.sell_in for x in items]
+
+        for day in range(0, 4):
+            GildedRose(items).update_quality()
+
+        for index, item in enumerate(items):
+            if item.name == "Sulfuras, Hand of Ragnaros":
+                continue
+            self.assertEqual(item.sell_in, (sell_in_initial_values[index]-4))
+            self.item_asserts(item)
+
+    def item_asserts(self, item):
+        """
+        assert if quality is within boundaries
+        """
+        self.assertTrue(item.quality <= 50)
+        self.assertTrue(item.quality >= 0)
 
 
 if __name__ == '__main__':
