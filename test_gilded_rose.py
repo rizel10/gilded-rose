@@ -91,6 +91,7 @@ class GildedRoseTest(unittest.TestCase):
 
     def test_backstage_quality_updater(self):
         backstage_15_days = Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=0)
+        backstage_3_days = Item(name="Backstage passes to a TAFKAL80ETC concert", sell_in=3, quality=45)
 
         for i in range(0, 4):
             BackstageQualityUpdater(backstage_15_days).update_quality()
@@ -110,7 +111,18 @@ class GildedRoseTest(unittest.TestCase):
         for i in range(0, 1):
             BackstageQualityUpdater(backstage_15_days).update_quality()
 
-        self.assertEqual(backstage_15_days.quality, 0)        
+        self.assertEqual(backstage_15_days.quality, 0)
+
+        for i in range(0, 2):
+            BackstageQualityUpdater(backstage_3_days).update_quality()
+
+        self.assertEqual(backstage_3_days.quality, 50)
+
+        for i in range(0, 1):
+            BackstageQualityUpdater(backstage_3_days).update_quality()
+
+        self.assertEqual(backstage_3_days.quality, 0)
+
 
 if __name__ == '__main__':
     unittest.main()
