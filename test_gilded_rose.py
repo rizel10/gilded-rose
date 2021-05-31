@@ -68,7 +68,6 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(brie_0_to_50.quality, 50)
         self.assertEqual(brie_25_to_50.quality, 50)
 
-
     def test_legendary_quality_updater(self):
         legendary_item = factory.resolve(Item(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80))
 
@@ -76,6 +75,19 @@ class GildedRoseTest(unittest.TestCase):
             LegendaryQualityUpdater(legendary_item).update_quality()
 
         self.assertEqual(legendary_item.quality, 80)
+
+    def test_conjured_quality_updater(self):
+        conjured_5_days = Item(name="Conjured Mana Cake", sell_in=4, quality=14)
+
+        for i in range (0, 3):
+            ConjuredQualityUpdater(conjured_5_days).update_quality()
+
+        self.assertEqual(conjured_5_days.quality, 8)
+
+        for i in range(0, 2):
+            ConjuredQualityUpdater(conjured_5_days).update_quality()
+
+        self.assertEqual(conjured_5_days.quality, 0)
 
 
 if __name__ == '__main__':
