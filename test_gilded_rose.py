@@ -69,5 +69,14 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(brie_25_to_50.quality, 50)
 
 
+    def test_legendary_quality_updater(self):
+        legendary_item = factory.resolve(Item(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80))
+
+        for i in range(0, 100):
+            LegendaryQualityUpdater(legendary_item).update_quality()
+
+        self.assertEqual(legendary_item.quality, 80)
+
+
 if __name__ == '__main__':
     unittest.main()
